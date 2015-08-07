@@ -1,0 +1,32 @@
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath 'com.android.tools.build:gradle:1.2.3'
+	}
+}
+
+apply plugin: 'com.android.application'
+
+dependencies {
+	compile files('libs/android-support-v4.jar')
+}
+
+android {
+	compileSdkVersion 21
+	buildToolsVersion '21.1.2'
+
+	sourceSets {
+		main {
+			manifest.srcFile 'AndroidManifest.xml'
+			java.srcDirs = ['src']
+			res.srcDirs = ['res']
+		}
+
+		defaultConfig {
+			applicationId "com.zyq.viewpager"
+			minSdkVersion 4
+		}
+	}
+}
