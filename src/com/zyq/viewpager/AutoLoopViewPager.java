@@ -211,6 +211,7 @@ public class AutoLoopViewPager extends ViewPager {
 
 	@Override
 	public void setCurrentItem(int item) {
+		if (DEBUG) Log.d(TAG, "当前在哪个item: " + getCurrentItem());
 		if (getCurrentItem() != item) {
 			setCurrentItem(item, true);
 		}
@@ -244,14 +245,37 @@ public class AutoLoopViewPager extends ViewPager {
 
 		//只有界面发生了变化,才会调用该方法,所以需要求到需要显示的位置.
 		@Override
-		public void onPageSelected(int position) {
-			int realPosition = mAdapter.toRealPosition(position);
-			//表示两次真实位置不同,说明发生了移动
-			if (mPreviousPosition != realPosition) {
-				mPreviousPosition = realPosition;
-				if (mOuterPageChangeListener != null) {
-					mOuterPageChangeListener.onPageSelected(realPosition);
+		public void onPageSelected(int arg0) {
+			if (DEBUG) Log.d(TAG, "onPageSelected:  " + arg0);
+//			int realPosition = mAdapter.toRealPosition(position);
+////			if ((realPosition == 0 && position == mAdapter.getCount() - 1) ||
+////					(realPosition == getAdapter().getCount() - 1 && position == 0)) {
+////				setCurrentItem(realPosition, false);
+////			}
+//			//表示两次真实位置不同,说明发生了移动
+//			if (mPreviousPosition != realPosition) {
+//				mPreviousPosition = realPosition;
+//				if (mOuterPageChangeListener != null) {
+//					mOuterPageChangeListener.onPageSelected(realPosition);
+//				}
+//			}
+			if (mAdapter != null) {
+				int position = AutoLoopViewPager.super.getCurrentItem();
+				if (DEBUG) Log.d(TAG, "onPageScrollStateChanged:  " + position);
+				int realPosition = mAdapter.toRealPosition(position);
+//				if (state == ViewPager.SCROLL_STATE_IDLE
+//						&& (position == 0 || position == mAdapter.getCount() - 1)) {
+//					if (DEBUG) Log.d(TAG, "到达相邻页   " + realPosition);
+//					setCurrentItem(, false);
+//				}
+
+				if (DEBUG) Log.d(TAG, "到达相邻页:  " + realPosition);
+				if (position == 0) {
+					setCurrentItem(realPosition, false);
+				} else if (position == mAdapter.getCount() - 1) {
+					setCurrentItem(realPosition, false);
 				}
+
 			}
 		}
 
@@ -265,6 +289,7 @@ public class AutoLoopViewPager extends ViewPager {
 		@Override
 		public void onPageScrolled(int position, float positionOffset,
 		                           int positionOffsetPixels) {
+			//if (DEBUG) Log.d(TAG, "onPageScrolled: " + position);
 			int realPosition = position;
 			if (mAdapter != null) {
 				realPosition = mAdapter.toRealPosition(position);
@@ -278,11 +303,11 @@ public class AutoLoopViewPager extends ViewPager {
 				 * .getCount() - 1)
 				 * 这里调用setCurrentItem(realPosition,false),主要是防止之前没被调用,其实没什么卵用.(现在还没要用到这段代码的地方 !!!!)
 				 */
-				if (positionOffset == 0
-						&& mPreviousOffset == 0
-						&& (position == 1 || position == mAdapter.getAdapter().getCount() - 1)) {
-					setCurrentItem(realPosition, false);
-				}
+//				if (positionOffset == 0
+//						&& mPreviousOffset == 0
+//						&& (position == 1 || position == mAdapter.getAdapter().getCount() - 1)) {
+//					setCurrentItem(realPosition, false);
+//				}
 			}
 
 			mPreviousOffset = positionOffset;
@@ -311,14 +336,7 @@ public class AutoLoopViewPager extends ViewPager {
 
 		@Override
 		public void onPageScrollStateChanged(int state) {
-			if (mAdapter != null) {
-				int position = AutoLoopViewPager.super.getCurrentItem();
-				int realPosition = mAdapter.toRealPosition(position);
-				if (state == ViewPager.SCROLL_STATE_IDLE
-						&& (position == 0 || position == mAdapter.getCount() - 1)) {
-					setCurrentItem(realPosition, false);
-				}
-			}
+
 			if (mOuterPageChangeListener != null) {
 				mOuterPageChangeListener.onPageScrollStateChanged(state);
 			}
@@ -375,7 +393,7 @@ public class AutoLoopViewPager extends ViewPager {
 	public void scrollOnce() {
 		PagerAdapter adapter = getAdapter();
 		int currentItem = getCurrentItem();//是指真实的位置
-		int totalCount = adapter.getCount();
+		int totalCount = adapter.getCount();//全部的数量.
 
 		if (DEBUG) {
 			Log.d(TAG, "有多少张图片" + adapter.getCount());
@@ -390,7 +408,7 @@ public class AutoLoopViewPager extends ViewPager {
 			Log.d(TAG, "nextItem:" + nextItem + " currentItem: " + currentItem);
 		}
 		if (nextItem == totalCount) {//当当前跑到最后一页,(其实现在应该指向第一页)
-			setCurrentItem(0, false);
+			setCurrentItem(0, true);
 		} else {
 			setCurrentItem(nextItem, true);
 		}

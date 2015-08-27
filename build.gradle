@@ -10,7 +10,7 @@ buildscript {
 apply plugin: 'com.android.application'
 
 dependencies {
-	compile files('libs/android-support-v4.jar')
+	compile 'com.android.support:support-v4:22.2.0'
 }
 
 android {

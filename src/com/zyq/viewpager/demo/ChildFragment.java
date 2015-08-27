@@ -1,5 +1,6 @@
 package com.zyq.viewpager.demo;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -30,31 +31,16 @@ public class ChildFragment extends Fragment {
 	}
 
 	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+	}
+
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if (DEBUG) Log.d(TAG, "onCreate()" + mContent);
-
-
-			/*Fragment.SavedState savedState = getActivity().getSupportFragmentManager().saveFragmentInstanceState
-			(this);
-			if (savedState != null) {
-				this.setInitialSavedState(savedState);
-				return;
-			}*/
-
-		/*if (savedInstanceState != null) {
-			if (savedInstanceState.containsKey(TEXT)) {
-				if (DEBUG) Log.d(TAG, "onCreate()-->savedInstanceState");
-				mContent = savedInstanceState.getString(TEXT);
-			}
-		} else {*/
 		if (getArguments() != null) {
-			if (DEBUG) Log.d(TAG, "onCreate()-->getArguments()");
 			mContent = getArguments().getString(TEXT);
 		}
-		//}
-
-		if (DEBUG) Log.d(TAG, "onCreate()" + mContent);
 	}
 
 	@Override
@@ -80,14 +66,31 @@ public class ChildFragment extends Fragment {
 	}
 
 	@Override
+	public void onViewStateRestored(Bundle savedInstanceState) {
+		super.onViewStateRestored(savedInstanceState);
+		if (DEBUG) Log.d(TAG, "onViewStateRestored()" + mContent);
+	}
+
+	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		if (DEBUG) Log.d(TAG, "onDestory()-->" + mContent);
+		if (DEBUG) Log.d(TAG, "onDestroy()-->" + mContent);
 	}
 
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
 		if (DEBUG) Log.d(TAG, "onDestroyView()-->" + mContent);
+	}
+
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		if (DEBUG) Log.d(TAG, "onDetach()-->" + mContent);
+	}
+
+	@Override
+	public String toString() {
+		return "fragment   " + mTvContent;
 	}
 }

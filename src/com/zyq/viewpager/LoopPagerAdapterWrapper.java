@@ -38,7 +38,7 @@ public class LoopPagerAdapterWrapper extends PagerAdapter {
 
 	private SparseArray<ToDestroy> mToDestroy = new SparseArray<ToDestroy>();
 
-	private boolean mBoundaryCaching;
+	private boolean mBoundaryCaching = true;
 
 	void setBoundaryCaching(boolean flag) {
 		mBoundaryCaching = flag;
@@ -101,31 +101,32 @@ public class LoopPagerAdapterWrapper extends PagerAdapter {
 		 *  考虑到切换到realPosition = realFirst || realPosition = readLast 时候,这时候,图片已经被回收了,FragmentStatePagerAdapter
 		 *  会保存 当前页,和前后一页,所以很有可能会被回收,所以这里的处理策略是用保存第一页和最后一页,这样onPageSe
 		 */
-		if (mBoundaryCaching) {
-			ToDestroy toDestroy = mToDestroy.get(position);
-			if (toDestroy != null) {
-				mToDestroy.remove(position);
-				return toDestroy.object;
-			}
-		}
+//		if (mBoundaryCaching) {
+//			ToDestroy toDestroy = mToDestroy.get(position);
+//			if (toDestroy != null) {
+//				mToDestroy.remove(position);
+//				return toDestroy.object;
+//			}
+//		}
 		return mAdapter.instantiateItem(container, realPosition);
 	}
 
 	@Override
 	public void destroyItem(ViewGroup container, int position, Object object) {
-		if (DEBUG) Log.d(TAG, "destoryItem:" + position +"object:"+object);
+		if (DEBUG) Log.d(TAG, "destroyItem:" + position + "object:" + object);
 		int realFirst = getRealFirstPosition();
 		int realLast = getRealLastPosition();
 		int realPosition = toRealPosition(position);
 
-		if (mBoundaryCaching && (position == realFirst || position == realLast)) {
-			if (DEBUG) Log.d(TAG, "回收图片:" + realFirst);
+		if (mBoundaryCaching && (position == 0 || position == getCount() - 1)) {
 			mToDestroy.put(position, new ToDestroy(container, realPosition,
 					object));
 		} else {
 			if (DEBUG) Log.d(TAG, "让chidlAdpater自己destory");
 			mAdapter.destroyItem(container, realPosition, object);
 		}
+
+		//mAdapter.destroyItem(container,realPosition,object);
 	}
 
     /*

@@ -9,7 +9,7 @@
                 tools:context = "com.zyq.viewpager.demo.LoopViewPagerActivity" >
 
 	<com.zyq.viewpager.AutoLoopViewPager
-			android:id="@+id/vp_looper"
+			android:id = "@+id/vp_looper"
 			android:layout_width = "match_parent"
 			android:layout_height = "match_parent" />
 

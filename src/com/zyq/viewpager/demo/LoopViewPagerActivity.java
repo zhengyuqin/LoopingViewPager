@@ -23,12 +23,19 @@ public class LoopViewPagerActivity extends FragmentActivity {
 		setContentView(R.layout.loopviewpager_view);
 		mAutoLoopViewPager = (AutoLoopViewPager) findViewById(R.id.vp_looper);
 		mChildFragments = new ArrayList<>();
-		for (int i = 0; i < 4; i++) {
+
+		//mChildFragments.add(ChildFragment.newInstance(String.valueOf(3)));
+		for (int i = 0; i < 3; i++) {
 			mChildFragments.add(ChildFragment.newInstance(String.valueOf(i)));
 		}
-		mLooperFragmentStatePager = new LooperFragmentStatePager(getSupportFragmentManager(), mChildFragments);
+		//mChildFragments.add(ChildFragment.newInstance(String.valueOf(0)));
+
+		mLooperFragmentStatePager = new LooperFragmentStatePager(getSupportFragmentManager(), mChildFragments,mAutoLoopViewPager);
 		mAutoLoopViewPager.setAdapter(mLooperFragmentStatePager);
-		mAutoLoopViewPager.startAutoScroll();
+		//mAutoLoopViewPager.setCurrentItem(2);
+		//mAutoLoopViewPager.setCurrentItem(0);
+		mAutoLoopViewPager.setCurrentItem(0);
+		//mAutoLoopViewPager.startAutoScroll();
 	}
 
 	@Override

@@ -10,10 +10,10 @@
                 android:background = "@android:color/white" >
 
 
-	<android.support.v4.view.ViewPager
+	<com.zyq.viewpager.AutoLoopViewPager
 			android:layout_width = "match_parent"
 			android:layout_height = "300dp"
-			android:id = "@+id/vp_content" ></android.support.v4.view.ViewPager >
+			android:id = "@+id/vp_content" ></com.zyq.viewpager.AutoLoopViewPager >
 
 
 </RelativeLayout >
